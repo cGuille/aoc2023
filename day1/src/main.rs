@@ -25,14 +25,10 @@ fn extract_first_and_last_digits(s: &str) -> (char, char) {
         if c.is_digit(10) {
             if first.is_none() {
                 first = Some(c);
-            } else {
-                last = Some(c);
             }
-        }
-    }
 
-    if last.is_none() {
-        last = first
+            last = Some(c);
+        }
     }
 
     (first.unwrap(), last.unwrap())
@@ -56,14 +52,10 @@ fn extract_first_and_last_digits_v2(s: &str) -> (char, char) {
 
             if first.is_none() {
                 first = c;
-            } else {
-                last = c;
             }
-        }
-    }
 
-    if last.is_none() {
-        last = first
+            last = c;
+        }
     }
 
     (first.unwrap(), last.unwrap())
