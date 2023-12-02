@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use crate::game::Game;
 
 mod game;
@@ -16,14 +18,21 @@ fn main() {
 fn part1(input: &str) -> u64 {
     input
         .lines()
-        .map(|line| line.parse::<Game>().unwrap())
+        .map(Game::from_str)
+        .map(Result::unwrap)
         .filter(|game| game.is_possible_with(12, 13, 14))
         .map(|game| game.id())
         .sum()
 }
 
-fn part2(_input: &str) -> u64 {
-    todo!()
+fn part2(input: &str) -> u64 {
+    input
+        .lines()
+        .map(Game::from_str)
+        .map(Result::unwrap)
+        .map(|game| game.minimal_set())
+        .map(|min_set| min_set.power())
+        .sum()
 }
 
 #[cfg(test)]
@@ -44,8 +53,7 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
     }
 
     #[test]
-    #[ignore = "until part 2 is implemented"]
     fn part2_with_sample() {
-        assert_eq!(0, part2(SAMPLE));
+        assert_eq!(2286, part2(SAMPLE));
     }
 }

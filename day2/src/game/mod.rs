@@ -38,6 +38,24 @@ impl Game {
                 && set.blue_count <= blue_count
         })
     }
+
+    pub(crate) fn minimal_set(&self) -> GameSet {
+        self.sets
+            .iter()
+            .fold(GameSet::default(), |mut min_set, set| {
+                if set.red_count > min_set.red_count {
+                    min_set.red_count = set.red_count;
+                }
+                if set.green_count > min_set.green_count {
+                    min_set.green_count = set.green_count;
+                }
+                if set.blue_count > min_set.blue_count {
+                    min_set.blue_count = set.blue_count;
+                }
+
+                min_set
+            })
+    }
 }
 
 #[derive(Default)]
@@ -47,57 +65,42 @@ pub(crate) struct GameSet {
     blue_count: u64,
 }
 
+impl GameSet {
+    pub(crate) fn power(&self) -> u64 {
+        self.red_count * self.green_count * self.blue_count
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    const GAME_1_SPEC: &str = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green";
+    const GAME_3_SPEC: &str =
+        "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red";
+
     #[test]
     fn test_game_possible_with() {
-        // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-        let game1 = Game {
-            id: 1,
-            sets: vec![
-                GameSet {
-                    red_count: 3,
-                    green_count: 0,
-                    blue_count: 3,
-                },
-                GameSet {
-                    red_count: 1,
-                    green_count: 2,
-                    blue_count: 6,
-                },
-                GameSet {
-                    red_count: 0,
-                    green_count: 2,
-                    blue_count: 0,
-                },
-            ],
-        };
-
-        // Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
-        let game3 = Game {
-            id: 3,
-            sets: vec![
-                GameSet {
-                    red_count: 20,
-                    green_count: 8,
-                    blue_count: 6,
-                },
-                GameSet {
-                    red_count: 4,
-                    green_count: 13,
-                    blue_count: 5,
-                },
-                GameSet {
-                    red_count: 1,
-                    green_count: 5,
-                    blue_count: 0,
-                },
-            ],
-        };
+        let game1 = Game::from_str(GAME_1_SPEC).unwrap();
+        let game3 = Game::from_str(GAME_3_SPEC).unwrap();
 
         assert!(game1.is_possible_with(12, 13, 14));
         assert!(!game3.is_possible_with(12, 13, 14));
+    }
+
+    #[test]
+    fn test_game_minimal_set() {
+        let game1 = Game::from_str(GAME_1_SPEC).unwrap();
+        let game3 = Game::from_str(GAME_3_SPEC).unwrap();
+
+        let min_set1 = game1.minimal_set();
+        assert_eq!(4, min_set1.red_count);
+        assert_eq!(2, min_set1.green_count);
+        assert_eq!(6, min_set1.blue_count);
+
+        let min_set3 = game3.minimal_set();
+        assert_eq!(20, min_set3.red_count);
+        assert_eq!(13, min_set3.green_count);
+        assert_eq!(6, min_set3.blue_count);
     }
 }
