@@ -43,15 +43,9 @@ impl Game {
         self.sets
             .iter()
             .fold(GameSet::default(), |mut min_set, set| {
-                if set.red_count > min_set.red_count {
-                    min_set.red_count = set.red_count;
-                }
-                if set.green_count > min_set.green_count {
-                    min_set.green_count = set.green_count;
-                }
-                if set.blue_count > min_set.blue_count {
-                    min_set.blue_count = set.blue_count;
-                }
+                min_set.red_count = std::cmp::max(min_set.red_count, set.red_count);
+                min_set.green_count = std::cmp::max(min_set.green_count, set.green_count);
+                min_set.blue_count = std::cmp::max(min_set.blue_count, set.blue_count);
 
                 min_set
             })
