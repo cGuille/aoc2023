@@ -46,22 +46,27 @@ fn parse_colour_amount(input: &str) -> IResult<&str, (u64, Colour)> {
 }
 
 fn parse_colour(input: &str) -> IResult<&str, Colour> {
-    let (remaining, colour_str) = alt((tag("red"), tag("green"), tag("blue")))(input)?;
-
-    let colour = match colour_str {
-        "red" => Colour::Red,
-        "green" => Colour::Green,
-        "blue" => Colour::Blue,
-        _ => unreachable!(),
-    };
-
-    Ok((remaining, colour))
+    alt((tag("red"), tag("green"), tag("blue")))(input)
+        .map(|(remaining, colour_str)| (remaining, colour_str.parse().unwrap()))
 }
 
 enum Colour {
     Red,
     Green,
     Blue,
+}
+
+impl FromStr for Colour {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(match s {
+            "red" => Colour::Red,
+            "green" => Colour::Green,
+            "blue" => Colour::Blue,
+            _ => return Err(format!("Invalid colour: {s}")),
+        })
+    }
 }
 
 fn parse_u64(input: &str) -> IResult<&str, u64> {
