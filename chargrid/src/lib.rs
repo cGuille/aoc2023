@@ -23,7 +23,21 @@ impl CharGrid {
         (pos + 1) % self.cols == 0 && pos < self.len()
     }
 
-    pub fn adj_cells(&self, pos: usize) -> Vec<char> {
+    pub fn adj_vals(&self, pos: usize) -> Vec<char> {
+        self.adj_pos(pos)
+            .into_iter()
+            .filter_map(|p| self.at(p))
+            .collect()
+    }
+
+    pub fn adj_cells(&self, pos: usize) -> Vec<(usize, char)> {
+        self.adj_pos(pos)
+            .into_iter()
+            .filter_map(|p| self.at(p).map(|v| (p, v)))
+            .collect()
+    }
+
+    pub fn adj_pos(&self, pos: usize) -> Vec<usize> {
         let cols = self.cols;
         let len = self.len();
 
@@ -66,7 +80,7 @@ impl CharGrid {
             }
         }
 
-        adj_pos.into_iter().filter_map(|p| self.at(p)).collect()
+        adj_pos
     }
 
     pub fn cells(&self) -> std::slice::Iter<'_, char> {
@@ -120,7 +134,7 @@ def
 
         assert_eq!(
             vec!['b', '1', '2'],
-            grid.adj_cells(0),
+            grid.adj_vals(0),
             "adjacent cells of pos 0"
         );
 
@@ -128,7 +142,7 @@ def
 
         assert_eq!(
             vec!['1', '2', '3', 'd', 'f', '4', '5', '6'],
-            grid.adj_cells(7),
+            grid.adj_vals(7),
             "adjacent cells of pos 0"
         );
 
@@ -136,7 +150,7 @@ def
 
         assert_eq!(
             vec!['d', 'e', 'f', '4', '6'],
-            grid.adj_cells(10),
+            grid.adj_vals(10),
             "adjacent cells of pos 0"
         );
     }
