@@ -4,6 +4,7 @@ Advent of Code 2023
 ## Set up a Cargo project for a new day
 
 - `cargo new dayX`
+- Add `"dayX"` to the workspace members in `Cargo.toml`.
 - Copy `main.rs.template` to `dayX/src/main.rs`.
 
 ## Run Cargo commands for a single day
