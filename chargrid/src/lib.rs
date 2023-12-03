@@ -19,6 +19,10 @@ impl CharGrid {
         self.cells.get(pos).copied()
     }
 
+    pub fn is_end_of_row(&self, pos: usize) -> bool {
+        (pos + 1) % self.cols == 0 && pos < self.len()
+    }
+
     pub fn adj_cells(&self, pos: usize) -> Vec<char> {
         let cols = self.cols;
         let len = self.len();
@@ -104,6 +108,15 @@ def
         assert_eq!(Some('1'), grid.at(3), "start of second line");
         assert_eq!(Some('6'), grid.at(11), "last cell");
         assert_eq!(None, grid.at(12), "after last cell");
+
+        assert!(grid.is_end_of_row(2), "pos 2 is end of row");
+        assert!(grid.is_end_of_row(5), "pos 5 is end of row");
+        assert!(grid.is_end_of_row(8), "pos 8 is end of row");
+        assert!(grid.is_end_of_row(11), "pos 11 is end of row");
+
+        assert!(!grid.is_end_of_row(0), "pos 0 is NOT end of row");
+        assert!(!grid.is_end_of_row(3), "pos 3 is NOT end of row");
+        assert!(!grid.is_end_of_row(12), "pos 2 is NOT end of row");
 
         assert_eq!(
             vec!['b', '1', '2'],
