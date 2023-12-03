@@ -18,6 +18,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "day3"
+version = "0.1.0"
+dependencies = [
+ "chargrid",
+]
+
+[[package]]
 name = "memchr"
 version = "2.6.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
