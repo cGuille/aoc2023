@@ -64,6 +64,10 @@ impl CharGrid {
 
         adj_pos.into_iter().filter_map(|p| self.at(p)).collect()
     }
+
+    pub fn cells(&self) -> std::slice::Iter<'_, char> {
+        self.cells.iter()
+    }
 }
 
 impl FromStr for CharGrid {
