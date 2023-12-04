@@ -1,4 +1,7 @@
-use std::{collections::HashSet, str::FromStr};
+use std::{
+    collections::{HashMap, HashSet, VecDeque},
+    str::FromStr,
+};
 
 fn main() {
     let input_path = std::env::args()
@@ -20,8 +23,25 @@ fn part1(input: &str) -> u64 {
         .sum()
 }
 
-fn part2(_input: &str) -> u64 {
-    todo!()
+fn part2(input: &str) -> u64 {
+    let cards: HashMap<u64, Card> = input
+        .lines()
+        .map(Card::from_str)
+        .map(Result::unwrap)
+        .map(|card| (card.id, card))
+        .collect();
+
+    let mut to_process = VecDeque::from_iter(cards.keys().copied());
+    let mut process_count = 0;
+
+    while let Some(card_id) = to_process.pop_front() {
+        process_count += 1;
+
+        let card = cards.get(&card_id).unwrap();
+        to_process.extend(card.won_card_ids());
+    }
+
+    process_count
 }
 
 #[derive(Debug)]
@@ -34,13 +54,26 @@ struct Card {
 
 impl Card {
     fn points(&self) -> u64 {
-        let winning_num_count = self.winning_nums.intersection(&self.draw).count();
+        let winning_num_count = self.winning_num_count();
 
         if winning_num_count < 2 {
             u64::try_from(winning_num_count).unwrap()
         } else {
             2u64.pow(u32::try_from(winning_num_count - 1).unwrap())
         }
+    }
+
+    fn won_card_ids(&self) -> std::ops::Range<u64> {
+        let winning_num_count = u64::try_from(self.winning_num_count()).unwrap();
+
+        let first_card_id = self.id + 1;
+        let last_card_id = first_card_id + winning_num_count;
+
+        first_card_id..last_card_id
+    }
+
+    fn winning_num_count(&self) -> usize {
+        self.winning_nums.intersection(&self.draw).count()
     }
 }
 
@@ -77,9 +110,8 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
     }
 
     #[test]
-    #[ignore = "until part 2 is implemented"]
     fn part2_with_sample() {
-        assert_eq!(0, part2(SAMPLE));
+        assert_eq!(30, part2(SAMPLE));
     }
 }
 
