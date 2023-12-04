@@ -3,17 +3,25 @@
 version = 3
 
 [[package]]
+name = "aocutil"
+version = "0.1.0"
+
+[[package]]
 name = "chargrid"
 version = "0.1.0"
 
 [[package]]
 name = "day1"
 version = "0.1.0"
+dependencies = [
+ "aocutil",
+]
 
 [[package]]
 name = "day2"
 version = "0.1.0"
 dependencies = [
+ "aocutil",
  "nom",
 ]
 
@@ -21,6 +29,7 @@ dependencies = [
 name = "day3"
 version = "0.1.0"
 dependencies = [
+ "aocutil",
  "chargrid",
 ]
 
@@ -28,6 +37,7 @@ dependencies = [
 name = "day4"
 version = "0.1.0"
 dependencies = [
+ "aocutil",
  "nom",
 ]
 

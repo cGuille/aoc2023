@@ -5,6 +5,7 @@ Advent of Code 2023
 
 - `cargo new dayX`
 - Add `"dayX"` to the workspace members in `Cargo.toml`.
+- `cargo add -p dayX --path aocutil`
 - Copy `main.rs.template` to `dayX/src/main.rs`.
 
 ## Run Cargo commands for a single day

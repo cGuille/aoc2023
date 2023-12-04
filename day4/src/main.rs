@@ -3,6 +3,8 @@ use std::{
     str::FromStr,
 };
 
+use aocutil::timed;
+
 fn main() {
     let input_path = std::env::args()
         .nth(1)
@@ -10,8 +12,11 @@ fn main() {
 
     let input = std::fs::read_to_string(input_path).expect("Could not read input");
 
-    println!("Part 1: {}", part1(&input));
-    println!("Part 2: {}", part2(&input));
+    let (res, timing) = timed(&input, part1);
+    println!("Part 1: {res} ({timing:?})");
+
+    let (res, timing) = timed(&input, part2);
+    println!("Part 2: {res} ({timing:?})");
 }
 
 fn part1(input: &str) -> u64 {
