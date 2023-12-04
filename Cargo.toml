@@ -2,4 +2,4 @@
 
 resolver = "2"
 
-members = ["chargrid", "day1", "day2", "day3"]
+members = ["chargrid", "day1", "day2", "day3", "day4"]
