@@ -1,3 +1,5 @@
+use aocutil::timed;
+
 fn main() {
     let input_path = std::env::args()
         .nth(1)
